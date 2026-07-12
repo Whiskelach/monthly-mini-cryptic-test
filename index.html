@@ -1,0 +1,1019 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mini Cryptic Crossword</title>
+
+  <style>
+  :root {
+  --black: #111;
+  --white: #fff;
+  --pale-green: #d9ead3;
+  --red: #b00020;
+  --pale-red: #ffd6d6;
+}
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: var(--white);
+      color: var(--black);
+      font-family: Georgia, "Times New Roman", serif;
+    }
+
+    .page {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+
+    .masthead {
+      border-bottom: 3px double var(--black);
+      padding-bottom: 14px;
+      margin-bottom: 24px;
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      align-items: flex-end;
+      flex-wrap: wrap;
+    }
+
+    .kicker {
+      margin: 0 0 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      font: 700 12px Arial, sans-serif;
+      color: var(--red);
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(32px, 6vw, 54px);
+      line-height: 1;
+    }
+
+    .subtitle {
+      margin: 8px 0 0;
+      font-size: 15px;
+    }
+
+    .controls {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      flex-wrap: wrap;
+      font-family: Arial, sans-serif;
+    }
+
+    select,
+    button {
+      border: 1px solid var(--black);
+      border-radius: 0;
+      background: var(--white);
+      color: var(--black);
+      padding: 8px 10px;
+      font: 700 14px Arial, sans-serif;
+    }
+
+    button {
+      cursor: pointer;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    button.primary {
+      background: var(--black);
+      color: var(--white);
+    }
+
+    button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .timer {
+      border: 1px solid var(--black);
+      padding: 8px 10px;
+      background: var(--white);
+      font: 700 15px "Courier New", monospace;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: minmax(280px, 420px) 1fr;
+      gap: 28px;
+      align-items: start;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      width: 100%;
+      max-width: 420px;
+     background: var(--black);
+  border: 2px solid var(--black);
+  gap: 2px;
+
+    }
+
+   .cell {
+  position: relative;
+  aspect-ratio: 1 / 1;
+  background: var(--white);
+}
+
+    .cell.block {
+      background: var(--black);
+    }
+
+.cell.correct,
+.cell.incorrect {
+  background: var(--white);
+}
+
+    .cell.active-entry {
+  background: #f7e6e9;
+}
+
+.cell.selected-cell {
+  box-shadow: inset 0 0 0 2px var(--red);
+}
+
+.clue-list li.active-clue {
+  border-left: 4px solid var(--red);
+  padding-left: 8px;
+  background: #f7e6e9;
+}
+
+.clue-button {
+  all: unset;
+  cursor: pointer;
+}
+
+.clue-button:hover {
+  color: var(--red);
+}
+
+.clue-button:focus {
+  outline: 2px solid var(--red);
+  outline-offset: 2px;
+}
+
+    .number {
+      position: absolute;
+      top: 2px;
+      left: 3px;
+      font: 700 10px Arial, sans-serif;
+      line-height: 1;
+      z-index: 1;
+    }
+
+    .cell input {
+      width: 100%;
+      height: 100%;
+      border: 0;
+      background: transparent;
+      color: var(--black);
+      text-align: center;
+      text-transform: uppercase;
+      font: 700 clamp(22px, 5vw, 34px) Arial, sans-serif;
+      padding: 10px 0 0;
+      outline: none;
+    }
+    .cell input:disabled {
+  color: var(--black);
+  opacity: 1;
+  -webkit-text-fill-color: var(--black);
+}
+    .cell input.revealed-incorrect,
+.cell input.revealed-incorrect:disabled {
+  color: var(--red);
+  opacity: 1;
+  -webkit-text-fill-color: var(--red);
+}
+
+    .cell input:focus {
+      box-shadow: inset 0 0 0 1px var(--black);
+    }
+
+    .actions {
+      max-width: 420px;
+      margin-top: 14px;
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      font-family: Arial, sans-serif;
+    }
+
+    .score-box {
+      max-width: 420px;
+      margin-top: 14px;
+      border: 2px solid var(--black);
+      padding: 12px;
+      font-family: Arial, sans-serif;
+    }
+
+    .score-big {
+      margin: 0 0 4px;
+      font-size: 28px;
+      font-weight: 800;
+    }
+
+    .clues {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+
+    .clue-section h2 {
+      margin: 0 0 8px;
+      padding-bottom: 4px;
+      border-bottom: 1px solid var(--black);
+      font-size: 20px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .clue-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      line-height: 1.25;
+      font-size: 16px;
+    }
+
+    .clue-list li {
+      margin-bottom: 8px;
+    }
+
+    .status-message {
+      border: 2px solid var(--black);
+      padding: 16px;
+      font-family: Arial, sans-serif;
+      background: var(--white);
+    }
+
+    .error {
+      border-color: var(--red);
+      color: var(--red);
+    }
+
+    .footer-note {
+      margin-top: 26px;
+      padding-top: 14px;
+      border-top: 3px double var(--black);
+      font-size: 14px;
+      line-height: 1.4;
+    }
+
+    .editor-helper {
+  margin-top: 26px;
+  padding-top: 14px;
+  border-top: 3px double var(--black);
+  font-family: Arial, sans-serif;
+}
+
+.editor-helper h2 {
+  margin: 0 0 8px;
+  font-size: 18px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.editor-helper p {
+  margin: 0 0 12px;
+  font-size: 14px;
+}
+
+.helper-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+
+.helper-list {
+  margin: 0;
+  padding-left: 20px;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.helper-list li {
+  margin-bottom: 4px;
+}
+
+.missing-clue {
+  color: var(--red);
+  font-weight: 700;
+}
+
+@media (max-width: 820px) {
+  .helper-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+   @media (max-width: 820px) {
+  .layout {
+    display: block;
+  }
+
+  .layout > div:first-child {
+    margin-bottom: 36px;
+  }
+
+  .grid {
+    margin-bottom: 16px;
+  }
+
+  .clues {
+    grid-template-columns: 1fr;
+  }
+
+  .controls {
+    width: 100%;
+  }
+}
+  </style>
+</head>
+
+<body>
+  <main class="page">
+    <header class="masthead">
+      <div>
+        <p class="kicker">7×7 Mini Cryptic</p>
+        <h1 id="puzzle-title">Loading...</h1>
+        <p class="subtitle" id="puzzle-subtitle">Loading puzzle data...</p>
+      </div>
+
+      <div class="controls">
+        <select id="puzzle-select" aria-label="Choose puzzle"></select>
+        <div class="timer" id="timer">00:00</div>
+      </div>
+    </header>
+
+    <section id="app"></section>
+
+    <section class="editor-helper" id="editor-helper"></section>
+    
+    <section class="footer-note">
+     <strong>Made by Lachlan Whisker</strong> · Found an issue or have a suggestion? Contact me at lachlan.whisker@ace.co.nz
+    </section>
+  </main>
+
+  <script>
+    let puzzles = [];
+    let currentPuzzle = null;
+    let letters = {};
+    let submitted = false;
+    let score = null;
+    let elapsed = 0;
+    let timerRunning = false;
+    let timerInterval = null;
+    let timerStartedAt = null;
+    let activeEntryId = null;
+    let activeDirection = "A";
+    let selectedCellKey = null;
+    let inputRefs = {};
+
+    const app = document.getElementById("app");
+    const puzzleTitle = document.getElementById("puzzle-title");
+    const puzzleSubtitle = document.getElementById("puzzle-subtitle");
+    const puzzleSelect = document.getElementById("puzzle-select");
+    const timer = document.getElementById("timer");
+    const editorHelper = document.getElementById("editor-helper");
+    const isAdminMode = new URLSearchParams(window.location.search).get("admin") === "true";
+
+    function getLocalTodayIso() {
+      const now = new Date();
+      const year = now.getFullYear();
+      const month = String(now.getMonth() + 1).padStart(2, "0");
+      const day = String(now.getDate()).padStart(2, "0");
+      return `${year}-${month}-${day}`;
+    }
+
+    function formatTime(totalSeconds) {
+      const minutes = String(Math.floor(totalSeconds / 60)).padStart(2, "0");
+      const seconds = String(totalSeconds % 60).padStart(2, "0");
+      return `${minutes}:${seconds}`;
+    }
+
+    function formatMonthYear(dateString) {
+  const date = new Date(`${dateString}T00:00:00`);
+  return date.toLocaleDateString("en-NZ", {
+    month: "long",
+    year: "numeric"
+  });
+}
+
+function formatMonthlyTitle(dateString) {
+  const date = new Date(`${dateString}T00:00:00`);
+  const month = date.toLocaleDateString("en-NZ", {
+    month: "long"
+  });
+
+  return `${month}'s Mini Cryptic`;
+}
+
+function getMonthKey(dateString) {
+  return dateString.slice(0, 7);
+}
+
+    function startTimer() {
+  if (timerRunning || submitted) return;
+
+  timerRunning = true;
+  timerStartedAt = Date.now() - elapsed * 1000;
+
+  timerInterval = setInterval(() => {
+    elapsed = Math.floor((Date.now() - timerStartedAt) / 1000);
+    timer.textContent = formatTime(elapsed);
+  }, 250);
+}
+
+ function stopTimer() {
+  if (timerRunning && timerStartedAt !== null) {
+    elapsed = Math.floor((Date.now() - timerStartedAt) / 1000);
+    timer.textContent = formatTime(elapsed);
+  }
+
+  timerRunning = false;
+  timerStartedAt = null;
+
+  if (timerInterval) {
+    clearInterval(timerInterval);
+    timerInterval = null;
+  }
+}
+
+ function resetPuzzleState() {
+  stopTimer();
+
+  letters = {};
+  submitted = false;
+  score = null;
+  elapsed = 0;
+  timerRunning = false;
+  timerStartedAt = null;
+  activeEntryId = null;
+  activeDirection = "A";
+  selectedCellKey = null;
+  inputRefs = {};
+
+  timer.textContent = "00:00";
+}
+
+    function isOpen(solutionRows, r, c) {
+      return (
+        r >= 0 &&
+        r < 7 &&
+        c >= 0 &&
+        c < 7 &&
+        solutionRows[r][c] !== "#"
+      );
+    }
+
+    function analyseGrid(solutionRows) {
+      const numbers = {};
+      const entries = [];
+      let currentNumber = 1;
+
+      for (let r = 0; r < 7; r += 1) {
+        for (let c = 0; c < 7; c += 1) {
+          if (!isOpen(solutionRows, r, c)) continue;
+
+          const startsAcross =
+            (c === 0 || !isOpen(solutionRows, r, c - 1)) &&
+            c + 1 < 7 &&
+            isOpen(solutionRows, r, c + 1);
+
+          const startsDown =
+            (r === 0 || !isOpen(solutionRows, r - 1, c)) &&
+            r + 1 < 7 &&
+            isOpen(solutionRows, r + 1, c);
+
+          if (startsAcross || startsDown) {
+            numbers[`${r}-${c}`] = currentNumber;
+
+            if (startsAcross) {
+              let answer = "";
+              let cells = [];
+              let cc = c;
+
+              while (isOpen(solutionRows, r, cc)) {
+                answer += solutionRows[r][cc];
+                cells.push(`${r}-${cc}`);
+                cc += 1;
+              }
+
+              entries.push({
+                id: `${currentNumber}A`,
+                number: currentNumber,
+                direction: "A",
+                answer,
+                cells
+              });
+            }
+
+            if (startsDown) {
+              let answer = "";
+              let cells = [];
+              let rr = r;
+
+              while (isOpen(solutionRows, rr, c)) {
+                answer += solutionRows[rr][c];
+                cells.push(`${rr}-${c}`);
+                rr += 1;
+              }
+
+              entries.push({
+                id: `${currentNumber}D`,
+                number: currentNumber,
+                direction: "D",
+                answer,
+                cells
+              });
+            }
+
+            currentNumber += 1;
+          }
+        }
+      }
+
+      return { numbers, entries };
+    }
+
+    function getCells(solutionRows) {
+      const cells = [];
+
+      for (let r = 0; r < 7; r += 1) {
+        for (let c = 0; c < 7; c += 1) {
+          cells.push({
+            r,
+            c,
+            solution: solutionRows[r][c]
+          });
+        }
+      }
+
+      return cells;
+    }
+
+    function validatePuzzle(puzzle) {
+      if (!puzzle.solutionRows || puzzle.solutionRows.length !== 7) {
+        return "Puzzle must have exactly 7 solutionRows.";
+      }
+
+      for (const row of puzzle.solutionRows) {
+        if (row.length !== 7) {
+          return "Each solution row must be exactly 7 characters long.";
+        }
+
+        if (!/^[A-Z#]+$/.test(row)) {
+          return "Solution rows may only contain uppercase A-Z letters and # symbols.";
+        }
+      }
+
+      return null;
+    }
+
+    function chooseDefaultPuzzle(publishedPuzzles) {
+  const currentMonth = getMonthKey(getLocalTodayIso());
+
+  const thisMonthsPuzzle = publishedPuzzles.find((puzzle) => {
+    return getMonthKey(puzzle.date) === currentMonth;
+  });
+
+  if (thisMonthsPuzzle) return thisMonthsPuzzle;
+
+  const sorted = [...publishedPuzzles].sort((a, b) => b.date.localeCompare(a.date));
+  return sorted[0];
+}
+
+    function setCurrentPuzzle(puzzleId) {
+      const selected = puzzles.find((puzzle) => puzzle.id === puzzleId);
+      if (!selected) return;
+
+      currentPuzzle = selected;
+      resetPuzzleState();
+      render();
+    }
+
+ function getActiveEntry() {
+  const { entries } = analyseGrid(currentPuzzle.solutionRows);
+  return entries.find((entry) => entry.id === activeEntryId);
+}
+
+function moveFocus(currentKey, direction) {
+  const activeEntry = getActiveEntry();
+
+  let cellKeys = [];
+
+  if (activeEntry && activeEntry.cells.includes(currentKey)) {
+    cellKeys = activeEntry.cells;
+  } else {
+    cellKeys = getCells(currentPuzzle.solutionRows)
+      .filter((cell) => cell.solution !== "#")
+      .map((cell) => `${cell.r}-${cell.c}`);
+  }
+
+  const currentIndex = cellKeys.indexOf(currentKey);
+  const nextKey = cellKeys[currentIndex + direction];
+
+  if (nextKey) {
+    selectedCellKey = nextKey;
+    render();
+
+    setTimeout(() => {
+      if (inputRefs[nextKey]) {
+        inputRefs[nextKey].focus();
+      }
+    }, 0);
+  }
+}
+
+    function handleInput(event, key) {
+  if (submitted) return;
+
+  startTimer();
+
+  selectedCellKey = key;
+
+  const value = event.target.value
+    .toUpperCase()
+    .replace(/[^A-Z]/g, "")
+    .slice(-1);
+
+  letters[key] = value;
+  event.target.value = value;
+
+  if (value) {
+    moveFocus(key, 1);
+  }
+}
+
+    function handleKeyDown(event, key) {
+  if (submitted) return;
+
+  selectedCellKey = key;
+
+  if (event.key === "Backspace" && !letters[key]) {
+    event.preventDefault();
+    moveFocus(key, -1);
+  }
+
+  if (event.key === "ArrowRight" || event.key === "ArrowDown") {
+    event.preventDefault();
+    moveFocus(key, 1);
+  }
+
+  if (event.key === "ArrowLeft" || event.key === "ArrowUp") {
+    event.preventDefault();
+    moveFocus(key, -1);
+  }
+}
+
+    function submitPuzzle() {
+      const cells = getCells(currentPuzzle.solutionRows);
+      const totalLetters = cells.filter((cell) => cell.solution !== "#").length;
+      let correct = 0;
+
+      cells.forEach((cell) => {
+        const key = `${cell.r}-${cell.c}`;
+        if (cell.solution !== "#" && letters[key] === cell.solution) {
+          correct += 1;
+        }
+      });
+
+      submitted = true;
+      stopTimer();
+
+      score = {
+        correct,
+        total: totalLetters,
+        percent: Math.round((correct / totalLetters) * 100)
+      };
+
+      render();
+    }
+
+    function resetPuzzle() {
+      resetPuzzleState();
+      render();
+    }
+
+    function copyResult() {
+      if (!score) return;
+
+      const message =
+        `Monthly Mini Cryptic — ${currentPuzzle.date}\n` +
+        `Score: ${score.percent}% (${score.correct}/${score.total})\n` +
+        `Time: ${formatTime(elapsed)}`;
+
+      navigator.clipboard.writeText(message);
+    }
+
+    function selectEntry(entryId, preferredCellKey = null) {
+  const { entries } = analyseGrid(currentPuzzle.solutionRows);
+  const entry = entries.find((item) => item.id === entryId);
+
+  if (!entry) return;
+
+  activeEntryId = entryId;
+  activeDirection = entry.direction;
+  selectedCellKey = preferredCellKey || entry.cells[0];
+
+  render();
+
+  if (selectedCellKey && inputRefs[selectedCellKey]) {
+    inputRefs[selectedCellKey].focus();
+  }
+}
+ function selectCell(cellKey, entries) {
+  if (submitted) return;
+
+  const matchingEntries = entries.filter((entry) => entry.cells.includes(cellKey));
+
+  if (matchingEntries.length === 0) return;
+
+  const acrossEntry = matchingEntries.find((entry) => entry.direction === "A");
+  const downEntry = matchingEntries.find((entry) => entry.direction === "D");
+
+  let nextEntry = null;
+
+  const clickedSameCell = selectedCellKey === cellKey;
+  const currentEntryIsAvailable = matchingEntries.some((entry) => entry.id === activeEntryId);
+
+  if (clickedSameCell && currentEntryIsAvailable && acrossEntry && downEntry) {
+    nextEntry = activeDirection === "A" ? downEntry : acrossEntry;
+  } else {
+    nextEntry = acrossEntry || downEntry || matchingEntries[0];
+  }
+
+  selectEntry(nextEntry.id, cellKey);
+}   
+    
+function renderEditorHelper(entries) {
+  if (!isAdminMode) {
+  editorHelper.innerHTML = "";
+  editorHelper.style.display = "none";
+  return;
+}
+
+editorHelper.style.display = "block";
+  
+  const across = entries.filter((entry) => entry.direction === "A");
+  const down = entries.filter((entry) => entry.direction === "D");
+
+  function makeHelperList(list) {
+    return list.map((entry) => {
+      const clueExists = currentPuzzle.clues && currentPuzzle.clues[entry.id];
+      const missingText = clueExists ? "" : " <span class=\"missing-clue\">Missing clue</span>";
+
+      return `
+        <li>
+          <strong>${entry.id}:</strong> ${entry.answer} (${entry.answer.length})
+          ${missingText}
+        </li>
+      `;
+    }).join("");
+  }
+
+  editorHelper.innerHTML = `
+    <h2>Puzzle editor helper</h2>
+    <p>
+      This section shows the clue IDs and answers generated from the current grid.
+      Use these IDs when editing <code>data/puzzles.json</code>.
+    </p>
+
+    <div class="helper-grid">
+      <div>
+        <h3>Across</h3>
+        <ol class="helper-list">
+          ${makeHelperList(across)}
+        </ol>
+      </div>
+
+      <div>
+        <h3>Down</h3>
+        <ol class="helper-list">
+          ${makeHelperList(down)}
+        </ol>
+      </div>
+    </div>
+  `;
+}
+    function render() {
+      if (!currentPuzzle) {
+        app.innerHTML = `
+          <div class="status-message error">
+            No published puzzle was found.
+          </div>
+        `;
+        return;
+      }
+
+      const validationError = validatePuzzle(currentPuzzle);
+
+      if (validationError) {
+        app.innerHTML = `
+          <div class="status-message error">
+            <strong>Puzzle data error:</strong> ${validationError}
+          </div>
+        `;
+        return;
+      }
+
+      const { numbers, entries } = analyseGrid(currentPuzzle.solutionRows);
+      const cells = getCells(currentPuzzle.solutionRows);
+      const across = entries.filter((entry) => entry.direction === "A");
+      const down = entries.filter((entry) => entry.direction === "D");
+
+      if (activeEntryId && !entries.some((entry) => entry.id === activeEntryId)) {
+  activeEntryId = null;
+}
+
+const activeEntry = entries.find((entry) => entry.id === activeEntryId);
+const activeCells = activeEntry ? activeEntry.cells : [];
+
+      renderEditorHelper(entries);
+
+    puzzleTitle.textContent = formatMonthlyTitle(currentPuzzle.date);
+      puzzleSubtitle.textContent =
+  `${formatMonthYear(currentPuzzle.date)} · Enter your answers, then submit for a percentage score.`;
+      puzzleSelect.value = currentPuzzle.id;
+
+      app.innerHTML = `
+        <section class="layout">
+          <div>
+            <div class="grid" id="grid"></div>
+
+            <div class="actions">
+              <button class="primary" id="submit-button" ${submitted ? "disabled" : ""}>Submit</button>
+              <button id="reset-button">Reset</button>
+              <button id="copy-button" ${score ? "" : "disabled"}>Copy result</button>
+            </div>
+
+            ${score ? `
+              <div class="score-box">
+                <p class="score-big">${score.percent}% correct</p>
+                <div>${score.correct} of ${score.total} letters correct · Time ${formatTime(elapsed)}</div>
+              </div>
+            ` : ""}
+          </div>
+
+          <div class="clues">
+            <section class="clue-section">
+              <h2>Across</h2>
+              <ol class="clue-list">
+               ${across.map((entry) => `
+  <li class="${activeEntryId === entry.id ? "active-clue" : ""}">
+    <button type="button" class="clue-button" data-entry-id="${entry.id}">
+      <strong>${entry.number}.</strong>
+      ${currentPuzzle.clues[entry.id] || `<em>Missing clue for ${entry.id}</em>`}
+    </button>
+  </li>
+`).join("")}
+              </ol>
+            </section>
+
+            <section class="clue-section">
+              <h2>Down</h2>
+              <ol class="clue-list">
+           ${down.map((entry) => `
+  <li class="${activeEntryId === entry.id ? "active-clue" : ""}">
+    <button type="button" class="clue-button" data-entry-id="${entry.id}">
+      <strong>${entry.number}.</strong>
+      ${currentPuzzle.clues[entry.id] || `<em>Missing clue for ${entry.id}</em>`}
+    </button>
+  </li>
+`).join("")}
+              </ol>
+            </section>
+          </div>
+        </section>
+      `;
+
+      const grid = document.getElementById("grid");
+      inputRefs = {};
+
+      cells.forEach((cell) => {
+        const key = `${cell.r}-${cell.c}`;
+        const isBlock = cell.solution === "#";
+        const entered = letters[key] || "";
+        const displayValue = submitted && !isBlock && entered !== cell.solution
+  ? cell.solution
+  : entered;
+
+        const div = document.createElement("div");
+        div.className = "cell";
+
+        if (isBlock) {
+          div.classList.add("block");
+        } else if (submitted && entered === cell.solution) {
+          div.classList.add("correct");
+        } else if (submitted && entered !== cell.solution) {
+          div.classList.add("incorrect");
+        }
+        if (!isBlock && !submitted && activeCells.includes(key)) {
+  div.classList.add("active-entry");
+}
+        if (!isBlock && !submitted && selectedCellKey === key) {
+  div.classList.add("selected-cell");
+}
+
+        if (!isBlock && numbers[key]) {
+          const number = document.createElement("span");
+          number.className = "number";
+          number.textContent = numbers[key];
+          div.appendChild(number);
+        }
+
+        if (!isBlock) {
+  div.addEventListener("click", () => {
+    selectCell(key, entries);
+  });
+}
+
+        if (!isBlock) {
+          const input = document.createElement("input");
+          input.maxLength = 1;
+          input.value = displayValue;
+          input.disabled = submitted;
+          input.setAttribute("aria-label", `Row ${cell.r + 1}, column ${cell.c + 1}`);
+          if (submitted && entered !== cell.solution) {
+  input.classList.add("revealed-incorrect");
+}
+
+         input.addEventListener("focus", startTimer);
+input.addEventListener("input", (event) => handleInput(event, key));
+input.addEventListener("keydown", (event) => handleKeyDown(event, key));
+
+          inputRefs[key] = input;
+          div.appendChild(input);
+        }
+
+        grid.appendChild(div);
+      });
+
+      document.getElementById("submit-button").addEventListener("click", submitPuzzle);
+      document.getElementById("reset-button").addEventListener("click", resetPuzzle);
+      document.getElementById("copy-button").addEventListener("click", copyResult);
+document.querySelectorAll("[data-entry-id]").forEach((button) => {
+  button.addEventListener("click", () => {
+    selectEntry(button.dataset.entryId);
+  });
+});
+      
+    }
+
+    async function loadPuzzles() {
+      try {
+        const response = await fetch("data/puzzles.json", { cache: "no-store" });
+
+        if (!response.ok) {
+          throw new Error("Could not load data/puzzles.json");
+        }
+
+        const allPuzzles = await response.json();
+
+        puzzles = allPuzzles
+          .filter((puzzle) => puzzle.status === "Published")
+          .sort((a, b) => a.date.localeCompare(b.date));
+
+        if (puzzles.length === 0) {
+          throw new Error("No published puzzles found in puzzles.json");
+        }
+
+        puzzleSelect.innerHTML = puzzles
+  .map((puzzle) => `<option value="${puzzle.id}">${formatMonthYear(puzzle.date)}</option>`)
+  .join("");
+
+        puzzleSelect.addEventListener("change", (event) => {
+          setCurrentPuzzle(event.target.value);
+        });
+
+        currentPuzzle = chooseDefaultPuzzle(puzzles);
+        render();
+      } catch (error) {
+        puzzleTitle.textContent = "Daily Mini Cryptic";
+        puzzleSubtitle.textContent = "There was a problem loading the puzzle data.";
+
+        app.innerHTML = `
+          <div class="status-message error">
+            <strong>Could not load puzzle data.</strong><br>
+            Check that <code>data/puzzles.json</code> exists and contains valid JSON.<br><br>
+            Technical message: ${error.message}
+          </div>
+        `;
+      }
+    }
+
+    loadPuzzles();
+  </script>
+</body>
+</html>
