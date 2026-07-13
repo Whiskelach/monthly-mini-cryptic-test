@@ -136,17 +136,30 @@
 }
 
     .cell.active-entry {
-  background: #f7e6e9;
+  background: #f1cfd6;
 }
 
 .cell.selected-cell {
-  box-shadow: inset 0 0 0 2px var(--red);
+  position: relative;
+}
+
+.cell.selected-cell::after {
+  content: "";
+  position: absolute;
+  inset: 2px;
+  border: 2px solid var(--red);
+  border-radius: 5px;
+  pointer-events: none;
+  z-index: 4;
+}
+
+.clue-list li {
+  padding: 4px 8px;
 }
 
 .clue-list li.active-clue {
-  border-left: 4px solid var(--red);
-  padding-left: 8px;
-  background: #f7e6e9;
+  background: #f1cfd6;
+  box-shadow: inset -4px 0 0 var(--red);
 }
 
 .clue-button {
@@ -164,13 +177,14 @@
 }
 
     .number {
-      position: absolute;
-      top: 2px;
-      left: 3px;
-      font: 700 10px Arial, sans-serif;
-      line-height: 1;
-      z-index: 1;
-    }
+  position: absolute;
+  top: 2px;
+  left: 3px;
+  font: 700 10px Arial, sans-serif;
+  line-height: 1;
+  z-index: 5;
+  background: transparent;
+}
 
     .cell input {
       width: 100%;
@@ -197,8 +211,8 @@
 }
 
     .cell input:focus {
-      box-shadow: inset 0 0 0 1px var(--black);
-    }
+  box-shadow: none;
+}
 
     .actions {
       max-width: 420px;
@@ -656,15 +670,48 @@ function moveFocus(currentKey, direction) {
   }
 }
 
-    function handleKeyDown(event, key) {
+ function handleKeyDown(event, key) {
   if (submitted) return;
 
   selectedCellKey = key;
 
+  if (event.key === "Tab") {
+    event.preventDefault();
+    selectNextEntry(event.shiftKey ? -1 : 1);
+    return;
+  }
+
+  if (/^[a-zA-Z]$/.test(event.key)) {
+    event.preventDefault();
+    startTimer();
+
+    letters[key] = event.key.toUpperCase();
+
+    if (event.target) {
+      event.target.value = letters[key];
+    }
+
+    moveFocus(key, 1);
+    return;
+  }
+
   if (event.key === "Backspace" && !letters[key]) {
     event.preventDefault();
     moveFocus(key, -1);
+    return;
   }
+
+  if (event.key === "ArrowRight" || event.key === "ArrowDown") {
+    event.preventDefault();
+    moveFocus(key, 1);
+    return;
+  }
+
+  if (event.key === "ArrowLeft" || event.key === "ArrowUp") {
+    event.preventDefault();
+    moveFocus(key, -1);
+  }
+}
 
   if (event.key === "ArrowRight" || event.key === "ArrowDown") {
     event.preventDefault();
@@ -756,6 +803,27 @@ function moveFocus(currentKey, direction) {
 
   selectEntry(nextEntry.id, cellKey);
 }   
+    function selectNextEntry(direction = 1) {
+  if (!currentPuzzle) return;
+
+  const { entries } = analyseGrid(currentPuzzle.solutionRows);
+  const across = entries.filter((entry) => entry.direction === "A");
+  const down = entries.filter((entry) => entry.direction === "D");
+  const orderedEntries = [...across, ...down];
+
+  if (orderedEntries.length === 0) return;
+
+  let currentIndex = orderedEntries.findIndex((entry) => entry.id === activeEntryId);
+
+  if (currentIndex === -1) {
+    currentIndex = direction === 1 ? -1 : 0;
+  }
+
+  const nextIndex =
+    (currentIndex + direction + orderedEntries.length) % orderedEntries.length;
+
+  selectEntry(orderedEntries[nextIndex].id);
+}
     
 function renderEditorHelper(entries) {
   if (!isAdminMode) {
@@ -853,10 +921,10 @@ const activeCells = activeEntry ? activeEntry.cells : [];
             <div class="grid" id="grid"></div>
 
             <div class="actions">
-              <button class="primary" id="submit-button" ${submitted ? "disabled" : ""}>Submit</button>
-              <button id="reset-button">Reset</button>
-              <button id="copy-button" ${score ? "" : "disabled"}>Copy result</button>
-            </div>
+  <button class="primary" id="submit-button" ${submitted ? "disabled" : ""}>Submit</button>
+  <button id="reset-button">Reset</button>
+  ${score ? `<button id="copy-button">Copy result</button>` : ""}
+</div>
 
             ${score ? `
               <div class="score-box">
@@ -961,8 +1029,12 @@ input.addEventListener("keydown", (event) => handleKeyDown(event, key));
       });
 
       document.getElementById("submit-button").addEventListener("click", submitPuzzle);
-      document.getElementById("reset-button").addEventListener("click", resetPuzzle);
-      document.getElementById("copy-button").addEventListener("click", copyResult);
+document.getElementById("reset-button").addEventListener("click", resetPuzzle);
+
+const copyButton = document.getElementById("copy-button");
+if (copyButton) {
+  copyButton.addEventListener("click", copyResult);
+}
 document.querySelectorAll("[data-entry-id]").forEach((button) => {
   button.addEventListener("click", () => {
     selectEntry(button.dataset.entryId);
