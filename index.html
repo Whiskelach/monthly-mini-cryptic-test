@@ -137,21 +137,6 @@
   background: var(--black);
 }
 
-.grid-lines {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  z-index: 30;
-  overflow: visible;
-}
-
-.grid-lines rect {
-  fill: var(--black);
-  shape-rendering: crispEdges;
-}
-
 .cell.correct,
 .cell.incorrect {
   background: var(--white);
@@ -598,55 +583,6 @@ function analyseGrid(solutionRows) {
 
   return { numbers, entries };
 }
-
-function drawGridLines(grid, gridSize, cellSize, lineSize = 2) {
-  const existingLines = grid.querySelector(".grid-lines");
-
-  if (existingLines) {
-    existingLines.remove();
-  }
-
-  const totalSize = gridSize * cellSize;
-
-  const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-  svg.classList.add("grid-lines");
-  svg.setAttribute("viewBox", `0 0 ${totalSize} ${totalSize}`);
-  svg.setAttribute("preserveAspectRatio", "none");
-
-  for (let i = 0; i <= gridSize; i += 1) {
-    let position = i * cellSize - lineSize / 2;
-
-    if (i === 0) {
-      position = 0;
-    }
-
-    if (i === gridSize) {
-      position = totalSize - lineSize;
-    }
-
-    const verticalLine = document.createElementNS("http://www.w3.org/2000/svg", "rect");
-    verticalLine.setAttribute("x", position);
-    verticalLine.setAttribute("y", 0);
-    verticalLine.setAttribute("width", lineSize);
-    verticalLine.setAttribute("height", totalSize);
-    verticalLine.setAttribute("fill", "#111");
-    verticalLine.setAttribute("shape-rendering", "crispEdges");
-
-    const horizontalLine = document.createElementNS("http://www.w3.org/2000/svg", "rect");
-    horizontalLine.setAttribute("x", 0);
-    horizontalLine.setAttribute("y", position);
-    horizontalLine.setAttribute("width", totalSize);
-    horizontalLine.setAttribute("height", lineSize);
-    horizontalLine.setAttribute("fill", "#111");
-    horizontalLine.setAttribute("shape-rendering", "crispEdges");
-
-    svg.appendChild(verticalLine);
-    svg.appendChild(horizontalLine);
-  }
-
-  grid.appendChild(svg);
-}
-
     
     function getCells(solutionRows) {
   const gridHeight = solutionRows.length;
