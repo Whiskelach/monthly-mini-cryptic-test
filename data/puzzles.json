@@ -63,5 +63,85 @@
     "9D": "Test down clue 9 (10)",
     "10D": "Test down clue 10 (10)"
   }
+},
+{
+  "id": "2026-09-test-8x8",
+  "date": "2026-09-01",
+  "title": "8x8 Test Puzzle",
+  "status": "Published",
+  "solutionRows": [
+    "CROSSING",
+    "NOTEBOOK",
+    "KEYBOARD",
+    "HEADLINE",
+    "MAGAZINE",
+    "PASSWORD",
+    "JOURNALS",
+    "BOOKMARK"
+  ],
+  "clues": {
+    "1A": "Test clue for CROSSING (8)",
+    "1D": "Test clue for CNKHMPJB (8)",
+    "2D": "Test clue for ROEEAAOO (8)",
+    "3D": "Test clue for OTYAGSUO (8)",
+    "4D": "Test clue for SEBDASRK (8)",
+    "5D": "Test clue for SBOLZWNM (8)",
+    "6D": "Test clue for IOAIIOAA (8)",
+    "7D": "Test clue for NORNNRLR (8)",
+    "8D": "Test clue for GKDEEDSK (8)",
+    "9A": "Test clue for NOTEBOOK (8)",
+    "10A": "Test clue for KEYBOARD (8)",
+    "11A": "Test clue for HEADLINE (8)",
+    "12A": "Test clue for MAGAZINE (8)",
+    "13A": "Test clue for PASSWORD (8)",
+    "14A": "Test clue for JOURNALS (8)",
+    "15A": "Test clue for BOOKMARK (8)"
+  }
+},
+  {
+  "id": "2026-11-test-12x12",
+  "date": "2026-11-01",
+  "title": "12x12 Test Puzzle",
+  "status": "Published",
+  "solutionRows": [
+    "CROSSWORDING",
+    "BLACKBOARDED",
+    "NEWSLETTERED",
+    "JAVASCRIPTER",
+    "THEMATICALLY",
+    "BACKGROUNDER",
+    "TYPEWRITINGS",
+    "PUBLICATIONS",
+    "CONNECTIONAL",
+    "BOOKMARKLETS",
+    "NAVIGATIONAL",
+    "EXPLANATIONS"
+  ],
+  "clues": {
+    "1A": "Test clue for CROSSWORDING (12)",
+    "1D": "Test clue for CBNJTBTPCBNE (12)",
+    "2D": "Test clue for RLEAHAYUOOAX (12)",
+    "3D": "Test clue for OAWVECPBNOVP (12)",
+    "4D": "Test clue for SCSAMKELNKIL (12)",
+    "5D": "Test clue for SKLSAGWIEMGA (12)",
+    "6D": "Test clue for WBECTRRCCAAN (12)",
+    "7D": "Test clue for OOTRIOIATRTA (12)",
+    "8D": "Test clue for RATICUTTIKIT (12)",
+    "9D": "Test clue for DREPANIIOLOI (12)",
+    "10D": "Test clue for IDRTLDNONENO (12)",
+    "11D": "Test clue for NEEELEGNATAN (12)",
+    "12D": "Test clue for GDDRYRSSLSLS (12)",
+    "13A": "Test clue for BLACKBOARDED (12)",
+    "14A": "Test clue for NEWSLETTERED (12)",
+    "15A": "Test clue for JAVASCRIPTER (12)",
+    "16A": "Test clue for THEMATICALLY (12)",
+    "17A": "Test clue for BACKGROUNDER (12)",
+    "18A": "Test clue for TYPEWRITINGS (12)",
+    "19A": "Test clue for PUBLICATIONS (12)",
+    "20A": "Test clue for CONNECTIONAL (12)",
+    "21A": "Test clue for BOOKMARKLETS (12)",
+    "22A": "Test clue for NAVIGATIONAL (12)",
+    "23A": "Test clue for EXPLANATIONS (12)"
+  }
 }
 ]
