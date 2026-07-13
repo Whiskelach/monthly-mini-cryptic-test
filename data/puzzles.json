@@ -22,5 +22,46 @@
       "3D": "Inspect rations packed for ranges (7)",
       "4D": "Active animators cut a short moment off Catherine the Great? (7)"
     }
+  },
+{
+  "id": "2026-08-test-10x10",
+  "date": "2026-08-01",
+  "title": "10x10 Test Puzzle",
+  "status": "Published",
+  "solutionRows": [
+    "BLACKBOARD",
+    "CROSSWORDS",
+    "JAVASCRIPT",
+    "BOOKMARKED",
+    "NEWSLETTER",
+    "TYPEWRITER",
+    "BACKGROUND",
+    "JOURNALIST",
+    "CONNECTION",
+    "TELEVISION"
+  ],
+  "clues": {
+    "1A": "Test across clue for BLACKBOARD (10)",
+    "11A": "Test across clue for CROSSWORDS (10)",
+    "12A": "Test across clue for JAVASCRIPT (10)",
+    "13A": "Test across clue for BOOKMARKED (10)",
+    "14A": "Test across clue for NEWSLETTER (10)",
+    "15A": "Test across clue for TYPEWRITER (10)",
+    "16A": "Test across clue for BACKGROUND (10)",
+    "17A": "Test across clue for JOURNALIST (10)",
+    "18A": "Test across clue for CONNECTION (10)",
+    "19A": "Test across clue for TELEVISION (10)",
+
+    "1D": "Test down clue 1 (10)",
+    "2D": "Test down clue 2 (10)",
+    "3D": "Test down clue 3 (10)",
+    "4D": "Test down clue 4 (10)",
+    "5D": "Test down clue 5 (10)",
+    "6D": "Test down clue 6 (10)",
+    "7D": "Test down clue 7 (10)",
+    "8D": "Test down clue 8 (10)",
+    "9D": "Test down clue 9 (10)",
+    "10D": "Test down clue 10 (10)"
   }
+}
 ]
