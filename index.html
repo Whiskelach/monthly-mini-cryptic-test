@@ -485,84 +485,89 @@ function getMonthKey(dateString) {
 }
 
     function isOpen(solutionRows, r, c) {
-      return (
-        r >= 0 &&
-        r < 7 &&
-        c >= 0 &&
-        c < 7 &&
-        solutionRows[r][c] !== "#"
-      );
-    }
+  const gridHeight = solutionRows.length;
+  const gridWidth = solutionRows[0].length;
 
-    function analyseGrid(solutionRows) {
-      const numbers = {};
-      const entries = [];
-      let currentNumber = 1;
+  return (
+    r >= 0 &&
+    r < gridHeight &&
+    c >= 0 &&
+    c < gridWidth &&
+    solutionRows[r][c] !== "#"
+  );
+}
+    
+function analyseGrid(solutionRows) {
+  const gridHeight = solutionRows.length;
+  const gridWidth = solutionRows[0].length;
+  const numbers = {};
+  const entries = [];
+  let currentNumber = 1;
 
-      for (let r = 0; r < 7; r += 1) {
-        for (let c = 0; c < 7; c += 1) {
-          if (!isOpen(solutionRows, r, c)) continue;
+  for (let r = 0; r < gridHeight; r += 1) {
+    for (let c = 0; c < gridWidth; c += 1) {
+      if (!isOpen(solutionRows, r, c)) continue;
 
-          const startsAcross =
-            (c === 0 || !isOpen(solutionRows, r, c - 1)) &&
-            c + 1 < 7 &&
-            isOpen(solutionRows, r, c + 1);
+      const startsAcross =
+        (c === 0 || !isOpen(solutionRows, r, c - 1)) &&
+        c + 1 < gridWidth &&
+        isOpen(solutionRows, r, c + 1);
 
-          const startsDown =
-            (r === 0 || !isOpen(solutionRows, r - 1, c)) &&
-            r + 1 < 7 &&
-            isOpen(solutionRows, r + 1, c);
+      const startsDown =
+        (r === 0 || !isOpen(solutionRows, r - 1, c)) &&
+        r + 1 < gridHeight &&
+        isOpen(solutionRows, r + 1, c);
 
-          if (startsAcross || startsDown) {
-            numbers[`${r}-${c}`] = currentNumber;
+      if (startsAcross || startsDown) {
+        numbers[`${r}-${c}`] = currentNumber;
 
-            if (startsAcross) {
-              let answer = "";
-              let cells = [];
-              let cc = c;
+        if (startsAcross) {
+          let answer = "";
+          let cells = [];
+          let cc = c;
 
-              while (isOpen(solutionRows, r, cc)) {
-                answer += solutionRows[r][cc];
-                cells.push(`${r}-${cc}`);
-                cc += 1;
-              }
-
-              entries.push({
-                id: `${currentNumber}A`,
-                number: currentNumber,
-                direction: "A",
-                answer,
-                cells
-              });
-            }
-
-            if (startsDown) {
-              let answer = "";
-              let cells = [];
-              let rr = r;
-
-              while (isOpen(solutionRows, rr, c)) {
-                answer += solutionRows[rr][c];
-                cells.push(`${rr}-${c}`);
-                rr += 1;
-              }
-
-              entries.push({
-                id: `${currentNumber}D`,
-                number: currentNumber,
-                direction: "D",
-                answer,
-                cells
-              });
-            }
-
-            currentNumber += 1;
+          while (isOpen(solutionRows, r, cc)) {
+            answer += solutionRows[r][cc];
+            cells.push(`${r}-${cc}`);
+            cc += 1;
           }
-        }
-      }
 
-      return { numbers, entries };
+          entries.push({
+            id: `${currentNumber}A`,
+            number: currentNumber,
+            direction: "A",
+            answer,
+            cells
+          });
+        }
+
+        if (startsDown) {
+          let answer = "";
+          let cells = [];
+          let rr = r;
+
+          while (isOpen(solutionRows, rr, c)) {
+            answer += solutionRows[rr][c];
+            cells.push(`${rr}-${c}`);
+            rr += 1;
+          }
+
+          entries.push({
+            id: `${currentNumber}D`,
+            number: currentNumber,
+            direction: "D",
+            answer,
+            cells
+          });
+        }
+
+        currentNumber += 1;
+      }
     }
+  }
+
+  return { numbers, entries };
+}
 
     function getCells(solutionRows) {
       const cells = [];
