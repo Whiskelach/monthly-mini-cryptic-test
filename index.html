@@ -134,8 +134,19 @@
 }
 
     .cell.block {
-      background: var(--black);
-    }
+  background: var(--black);
+  border-right-color: var(--black);
+  border-bottom-color: var(--black);
+}
+
+.cell.block::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  background: var(--black);
+  z-index: 1;
+  pointer-events: none;
+}
 
 .cell.correct,
 .cell.incorrect {
