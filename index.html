@@ -713,17 +713,6 @@ function moveFocus(currentKey, direction) {
   }
 }
 
-  if (event.key === "ArrowRight" || event.key === "ArrowDown") {
-    event.preventDefault();
-    moveFocus(key, 1);
-  }
-
-  if (event.key === "ArrowLeft" || event.key === "ArrowUp") {
-    event.preventDefault();
-    moveFocus(key, -1);
-  }
-
-
     function submitPuzzle() {
       const cells = getCells(currentPuzzle.solutionRows);
       const totalLetters = cells.filter((cell) => cell.solution !== "#").length;
