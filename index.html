@@ -580,23 +580,39 @@ function getMonthKey(dateString) {
       return cells;
     }
 
-    function validatePuzzle(puzzle) {
-      if (!puzzle.solutionRows || puzzle.solutionRows.length !== 7) {
-        return "Puzzle must have exactly 7 solutionRows.";
-      }
+   function validatePuzzle(puzzle) {
+  if (!puzzle.solutionRows || !Array.isArray(puzzle.solutionRows)) {
+    return "Puzzle must include solutionRows.";
+  }
 
-      for (const row of puzzle.solutionRows) {
-        if (row.length !== 7) {
-          return "Each solution row must be exactly 7 characters long.";
-        }
+  const gridHeight = puzzle.solutionRows.length;
 
-        if (!/^[A-Z#]+$/.test(row)) {
-          return "Solution rows may only contain uppercase A-Z letters and # symbols.";
-        }
-      }
+  if (gridHeight < 7 || gridHeight > 12) {
+    return "Puzzle grid must be between 7x7 and 12x12.";
+  }
 
-      return null;
+  const gridWidth = puzzle.solutionRows[0]?.length;
+
+  if (!gridWidth) {
+    return "Puzzle rows cannot be empty.";
+  }
+
+  if (gridWidth !== gridHeight) {
+    return "Puzzle grid must be square, for example 7x7, 10x10, or 12x12.";
+  }
+
+  for (const row of puzzle.solutionRows) {
+    if (row.length !== gridWidth) {
+      return "Every solution row must be the same length.";
     }
+
+    if (!/^[A-Z#]+$/.test(row)) {
+      return "Solution rows may only contain uppercase A-Z letters and # symbols.";
+    }
+  }
+
+  return null;
+}
 
     function chooseDefaultPuzzle(publishedPuzzles) {
   const currentMonth = getMonthKey(getLocalTodayIso());
