@@ -110,13 +110,14 @@
       align-items: start;
     }
 
-   .grid {
+  .grid {
   display: grid;
   width: min(100%, var(--grid-width, 420px));
   max-width: none;
-  background: var(--black);
-  border: 2px solid var(--black);
-  gap: 2px;
+  background: var(--white);
+  border-top: 2px solid var(--black);
+  border-left: 2px solid var(--black);
+  gap: 0;
   overflow: visible;
 }
 
@@ -125,6 +126,8 @@
   position: relative;
   aspect-ratio: 1 / 1;
   background: var(--white);
+  border-right: 2px solid var(--black);
+  border-bottom: 2px solid var(--black);
   overflow: visible;
 }
 
