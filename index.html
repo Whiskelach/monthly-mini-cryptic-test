@@ -115,8 +115,8 @@
   width: auto;
   max-width: 100%;
   background: var(--black);
-  border: 2px solid var(--black);
-  gap: 2px;
+  border: 1px solid var(--black);
+  gap: 1px;
   overflow: visible;
   box-sizing: content-box;
 }
@@ -996,7 +996,7 @@ const activeCells = activeEntry ? activeEntry.cells : [];
 const gridSize = currentPuzzle.solutionRows[0].length;
 const preferredCellSize = 50;
 const minimumCellSize = 32;
-const lineSize = 2;
+const lineSize = 1;
 
 const parentWidth = Math.floor(grid.parentElement.getBoundingClientRect().width);
 const viewportSafeWidth = Math.floor(document.documentElement.clientWidth - 36);
