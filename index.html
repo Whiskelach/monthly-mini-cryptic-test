@@ -924,8 +924,8 @@ editorHelper.style.display = "block";
 
       const { numbers, entries } = analyseGrid(currentPuzzle.solutionRows);
       const cells = getCells(currentPuzzle.solutionRows);
-      const gridSize = currentPuzzle.solutionRows.length;
-gridSizeLabel.textContent = `${gridSize}×${gridSize} Mini Cryptic`;
+      const displayGridSize = currentPuzzle.solutionRows.length;
+gridSizeLabel.textContent = `${displayGridSize}×${displayGridSize} Mini Cryptic`;
       const across = entries.filter((entry) => entry.direction === "A");
       const down = entries.filter((entry) => entry.direction === "D");
 
