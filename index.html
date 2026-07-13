@@ -144,10 +144,8 @@
   overflow: visible;
 }
 
-.grid-lines line {
-  stroke: var(--black);
-  stroke-width: 2;
-  stroke-linecap: square;
+.grid-lines rect {
+  fill: var(--black);
   shape-rendering: crispEdges;
 }
 
@@ -613,24 +611,30 @@ function drawGridLines(grid, gridSize, cellSize, lineSize = 2) {
   svg.setAttribute("preserveAspectRatio", "none");
 
   for (let i = 0; i <= gridSize; i += 1) {
-    const position = i * cellSize;
+    let position = i * cellSize - lineSize / 2;
 
-    const verticalLine = document.createElementNS("http://www.w3.org/2000/svg", "line");
-    verticalLine.setAttribute("x1", position);
-    verticalLine.setAttribute("y1", 0);
-    verticalLine.setAttribute("x2", position);
-    verticalLine.setAttribute("y2", totalSize);
-    verticalLine.setAttribute("stroke", "#111");
-    verticalLine.setAttribute("stroke-width", lineSize);
+    if (i === 0) {
+      position = 0;
+    }
+
+    if (i === gridSize) {
+      position = totalSize - lineSize;
+    }
+
+    const verticalLine = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+    verticalLine.setAttribute("x", position);
+    verticalLine.setAttribute("y", 0);
+    verticalLine.setAttribute("width", lineSize);
+    verticalLine.setAttribute("height", totalSize);
+    verticalLine.setAttribute("fill", "#111");
     verticalLine.setAttribute("shape-rendering", "crispEdges");
 
-    const horizontalLine = document.createElementNS("http://www.w3.org/2000/svg", "line");
-    horizontalLine.setAttribute("x1", 0);
-    horizontalLine.setAttribute("y1", position);
-    horizontalLine.setAttribute("x2", totalSize);
-    horizontalLine.setAttribute("y2", position);
-    horizontalLine.setAttribute("stroke", "#111");
-    horizontalLine.setAttribute("stroke-width", lineSize);
+    const horizontalLine = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+    horizontalLine.setAttribute("x", 0);
+    horizontalLine.setAttribute("y", position);
+    horizontalLine.setAttribute("width", totalSize);
+    horizontalLine.setAttribute("height", lineSize);
+    horizontalLine.setAttribute("fill", "#111");
     horizontalLine.setAttribute("shape-rendering", "crispEdges");
 
     svg.appendChild(verticalLine);
