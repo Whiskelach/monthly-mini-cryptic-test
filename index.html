@@ -110,16 +110,16 @@
       align-items: start;
     }
 
- .grid {
+.grid {
   display: grid;
-  width: 100%;
-  max-width: var(--grid-width, 420px);
+  width: auto;
+  max-width: 100%;
   background: var(--white);
   border-top: 2px solid var(--black);
   border-left: 2px solid var(--black);
   gap: 0;
   overflow: visible;
-  box-sizing: border-box;
+  box-sizing: content-box;
 }
 
 
@@ -994,12 +994,24 @@ const activeCells = activeEntry ? activeEntry.cells : [];
         </section>
       `;
 
-      const grid = document.getElementById("grid");
-    const gridSize = currentPuzzle.solutionRows[0].length;
+      const gridSize = currentPuzzle.solutionRows[0].length;
 const preferredCellSize = 50;
+const minimumCellSize = 34;
 
-grid.style.gridTemplateColumns = `repeat(${gridSize}, minmax(0, 1fr))`;
-grid.style.setProperty("--grid-width", `${gridSize * preferredCellSize + 2}px`);
+const parentWidth = Math.floor(grid.parentElement.getBoundingClientRect().width);
+const viewportSafeWidth = Math.floor(document.documentElement.clientWidth - 36);
+const availableWidth = Math.min(parentWidth, viewportSafeWidth);
+
+const gridLeftBorderWidth = 2;
+const availableForCells = availableWidth - gridLeftBorderWidth;
+
+let cellSize = Math.floor(availableForCells / gridSize);
+
+cellSize = Math.min(cellSize, preferredCellSize);
+cellSize = Math.max(cellSize, minimumCellSize);
+
+grid.style.gridTemplateColumns = `repeat(${gridSize}, ${cellSize}px)`;
+grid.style.width = `${gridSize * cellSize}px`;
       
       inputRefs = {};
 
