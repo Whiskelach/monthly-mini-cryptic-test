@@ -371,7 +371,7 @@
   <main class="page">
     <header class="masthead">
       <div>
-        <p class="kicker">7×7 Mini Cryptic</p>
+        <p class="kicker" id="grid-size-label">Mini Cryptic</p>
         <h1 id="puzzle-title">Loading...</h1>
         <p class="subtitle" id="puzzle-subtitle">Loading puzzle data...</p>
       </div>
@@ -411,6 +411,7 @@
     const puzzleSubtitle = document.getElementById("puzzle-subtitle");
     const puzzleSelect = document.getElementById("puzzle-select");
     const timer = document.getElementById("timer");
+    const gridSizeLabel = document.getElementById("grid-size-label");
     const editorHelper = document.getElementById("editor-helper");
     const isAdminMode = new URLSearchParams(window.location.search).get("admin") === "true";
 
@@ -923,6 +924,8 @@ editorHelper.style.display = "block";
 
       const { numbers, entries } = analyseGrid(currentPuzzle.solutionRows);
       const cells = getCells(currentPuzzle.solutionRows);
+      const gridSize = currentPuzzle.solutionRows.length;
+gridSizeLabel.textContent = `${gridSize}×${gridSize} Mini Cryptic`;
       const across = entries.filter((entry) => entry.direction === "A");
       const down = entries.filter((entry) => entry.direction === "D");
 
