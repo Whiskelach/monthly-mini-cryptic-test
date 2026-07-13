@@ -110,10 +110,10 @@
       align-items: start;
     }
 
-    .grid {
+   .grid {
   display: grid;
-  width: 100%;
-  max-width: 520px;
+  width: min(100%, var(--grid-width, 420px));
+  max-width: none;
   background: var(--black);
   border: 2px solid var(--black);
   gap: 2px;
@@ -983,7 +983,9 @@ const activeCells = activeEntry ? activeEntry.cells : [];
       `;
 
       const grid = document.getElementById("grid");
-      grid.style.gridTemplateColumns = `repeat(${currentPuzzle.solutionRows[0].length}, 1fr)`;
+      const gridSize = currentPuzzle.solutionRows[0].length;
+grid.style.gridTemplateColumns = `repeat(${gridSize}, 1fr)`;
+grid.style.setProperty("--grid-width", `${gridSize * 50 + (gridSize - 1) * 2 + 4}px`);
       
       inputRefs = {};
 
