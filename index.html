@@ -352,7 +352,6 @@
   }
 
 .grid {
-  width: 100%;
   max-width: 100%;
   margin-bottom: 16px;
 }
@@ -995,7 +994,20 @@ const activeCells = activeEntry ? activeEntry.cells : [];
       const grid = document.getElementById("grid");
       const gridSize = currentPuzzle.solutionRows[0].length;
 grid.style.gridTemplateColumns = `repeat(${gridSize}, 1fr)`;
-grid.style.setProperty("--grid-width", `${gridSize * 50 + (gridSize - 1) * 2 + 4}px`);
+
+const preferredCellSize = 50;
+const gridBorderAdjustment = 2;
+const desiredGridWidth = gridSize * preferredCellSize + gridBorderAdjustment;
+const availableGridWidth = Math.floor(grid.parentElement.getBoundingClientRect().width);
+
+let actualCellSize = preferredCellSize;
+
+if (desiredGridWidth > availableGridWidth) {
+  actualCellSize = Math.floor((availableGridWidth - gridBorderAdjustment) / gridSize);
+}
+
+const actualGridWidth = gridSize * actualCellSize + gridBorderAdjustment;
+grid.style.width = `${actualGridWidth}px`;
       
       inputRefs = {};
 
