@@ -1065,13 +1065,19 @@ const activeCells = activeEntry ? activeEntry.cells : [];
 
 const gridSize = currentPuzzle.solutionRows[0].length;
 const preferredCellSize = 50;
-const minimumCellSize = 32;
+
+const minimumCellSize =
+  gridSize >= 12 ? 24 :
+  gridSize >= 10 ? 28 :
+  32;
 
 const parentWidth = Math.floor(grid.parentElement.getBoundingClientRect().width);
 const viewportSafeWidth = Math.floor(document.documentElement.clientWidth - 36);
 const availableWidth = Math.min(parentWidth, viewportSafeWidth);
 
-let cellSize = Math.floor(availableWidth / gridSize);
+const finalBorderAllowance = 2;
+
+let cellSize = Math.floor((availableWidth - finalBorderAllowance) / gridSize);
 
 cellSize = Math.min(cellSize, preferredCellSize);
 cellSize = Math.max(cellSize, minimumCellSize);
