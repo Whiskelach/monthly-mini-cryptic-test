@@ -434,6 +434,68 @@
       return `${minutes}:${seconds}`;
     }
 
+    function getProgressKey(puzzle = currentPuzzle) {
+  if (!puzzle || !puzzle.id) return null;
+  return `monthlyMiniCrypticProgress:${puzzle.id}`;
+}
+
+function saveProgress() {
+  const key = getProgressKey();
+
+  if (!key) return;
+
+  const progress = {
+    letters,
+    elapsed,
+    submitted,
+    score,
+    activeEntryId,
+    activeDirection,
+    selectedCellKey,
+    savedAt: new Date().toISOString()
+  };
+
+  localStorage.setItem(key, JSON.stringify(progress));
+}
+
+function loadProgress() {
+  const key = getProgressKey();
+
+  if (!key) return;
+
+  const saved = localStorage.getItem(key);
+
+  if (!saved) return;
+
+  try {
+    const progress = JSON.parse(saved);
+
+    letters = progress.letters || {};
+    elapsed = Number(progress.elapsed) || 0;
+    submitted = Boolean(progress.submitted);
+    score = progress.score || null;
+    activeEntryId = progress.activeEntryId || null;
+    activeDirection = progress.activeDirection || "A";
+    selectedCellKey = progress.selectedCellKey || null;
+
+    timer.textContent = formatTime(elapsed);
+
+    if (submitted) {
+      stopTimer();
+    }
+  } catch (error) {
+    localStorage.removeItem(key);
+  }
+}
+
+function clearProgress(puzzle = currentPuzzle) {
+  const key = getProgressKey(puzzle);
+
+  if (!key) return;
+
+  localStorage.removeItem(key);
+}
+
     function formatMonthYear(dateString) {
   const date = new Date(`${dateString}T00:00:00`);
   return date.toLocaleDateString("en-NZ", {
@@ -462,9 +524,15 @@ function getMonthKey(dateString) {
   timerStartedAt = Date.now() - elapsed * 1000;
 
   timerInterval = setInterval(() => {
-    elapsed = Math.floor((Date.now() - timerStartedAt) / 1000);
-    timer.textContent = formatTime(elapsed);
-  }, 250);
+  const previousElapsed = elapsed;
+
+  elapsed = Math.floor((Date.now() - timerStartedAt) / 1000);
+  timer.textContent = formatTime(elapsed);
+
+  if (elapsed !== previousElapsed) {
+    saveProgress();
+  }
+}, 250);
 }
 
  function stopTimer() {
@@ -480,6 +548,8 @@ function getMonthKey(dateString) {
     clearInterval(timerInterval);
     timerInterval = null;
   }
+
+   saveProgress();
 }
 
  function resetPuzzleState() {
@@ -651,13 +721,16 @@ function analyseGrid(solutionRows) {
 }
 
     function setCurrentPuzzle(puzzleId) {
-      const selected = puzzles.find((puzzle) => puzzle.id === puzzleId);
-      if (!selected) return;
+  saveProgress();
 
-      currentPuzzle = selected;
-      resetPuzzleState();
-      render();
-    }
+  const selected = puzzles.find((puzzle) => puzzle.id === puzzleId);
+  if (!selected) return;
+
+  currentPuzzle = selected;
+  resetPuzzleState();
+  loadProgress();
+  render();
+}
 
  function getActiveEntry() {
   const { entries } = analyseGrid(currentPuzzle.solutionRows);
@@ -706,6 +779,8 @@ function moveFocus(currentKey, direction) {
 
   letters[key] = value;
   event.target.value = value;
+      
+  saveProgress();
 
   if (value) {
     moveFocus(key, 1);
@@ -733,6 +808,8 @@ function moveFocus(currentKey, direction) {
       event.target.value = letters[key];
     }
 
+    saveProgress();
+    
     moveFocus(key, 1);
     return;
   }
@@ -771,18 +848,21 @@ function moveFocus(currentKey, direction) {
       stopTimer();
 
       score = {
-        correct,
-        total: totalLetters,
-        percent: Math.round((correct / totalLetters) * 100)
-      };
+  correct,
+  total: totalLetters,
+  percent: Math.round((correct / totalLetters) * 100)
+};
 
-      render();
+saveProgress();
+
+render();
     }
 
     function resetPuzzle() {
-      resetPuzzleState();
-      render();
-    }
+  clearProgress();
+  resetPuzzleState();
+  render();
+}
 
     function copyResult() {
       if (!score) return;
@@ -804,6 +884,8 @@ function moveFocus(currentKey, direction) {
   activeEntryId = entryId;
   activeDirection = entry.direction;
   selectedCellKey = preferredCellKey || entry.cells[0];
+
+  saveProgress();
 
   render();
 
@@ -1127,7 +1209,8 @@ document.querySelectorAll("[data-entry-id]").forEach((button) => {
         });
 
         currentPuzzle = chooseDefaultPuzzle(puzzles);
-        render();
+loadProgress();
+render();
       } catch (error) {
         puzzleTitle.textContent = "Daily Mini Cryptic";
         puzzleSubtitle.textContent = "There was a problem loading the puzzle data.";
@@ -1142,6 +1225,8 @@ document.querySelectorAll("[data-entry-id]").forEach((button) => {
       }
     }
 
+    window.addEventListener("beforeunload", saveProgress);
+    
     loadPuzzles();
   </script>
 </body>
