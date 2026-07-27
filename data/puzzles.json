@@ -1,4 +1,5 @@
 [
+  
   {
     "id": "2026-07",
     "date": "2026-07-01",
@@ -23,125 +24,36 @@
       "4D": "Active animators cut a short moment off Catherine the Great? (7)"
     }
   },
-{
-  "id": "2026-08-test-10x10",
-  "date": "2026-08-01",
-  "title": "10x10 Test Puzzle",
-  "status": "Published",
-  "solutionRows": [
-    "BLACKBOARD",
-    "CROSSWORDS",
-    "JAVASCRIPT",
-    "BOOKMARKED",
-    "NEWSLETTER",
-    "TYPEWRITER",
-    "BACKGROUND",
-    "JOURNALIST",
-    "CONNECTION",
-    "TELEVISION"
-  ],
-  "clues": {
-    "1A": "Test across clue for BLACKBOARD (10)",
-    "11A": "Test across clue for CROSSWORDS (10)",
-    "12A": "Test across clue for JAVASCRIPT (10)",
-    "13A": "Test across clue for BOOKMARKED (10)",
-    "14A": "Test across clue for NEWSLETTER (10)",
-    "15A": "Test across clue for TYPEWRITER (10)",
-    "16A": "Test across clue for BACKGROUND (10)",
-    "17A": "Test across clue for JOURNALIST (10)",
-    "18A": "Test across clue for CONNECTION (10)",
-    "19A": "Test across clue for TELEVISION (10)",
 
-    "1D": "Test down clue 1 (10)",
-    "2D": "Test down clue 2 (10)",
-    "3D": "Test down clue 3 (10)",
-    "4D": "Test down clue 4 (10)",
-    "5D": "Test down clue 5 (10)",
-    "6D": "Test down clue 6 (10)",
-    "7D": "Test down clue 7 (10)",
-    "8D": "Test down clue 8 (10)",
-    "9D": "Test down clue 9 (10)",
-    "10D": "Test down clue 10 (10)"
-  }
-},
-{
-  "id": "2026-09-test-8x8",
-  "date": "2026-09-01",
-  "title": "8x8 Test Puzzle",
-  "status": "Published",
-  "solutionRows": [
-    "CROSSING",
-    "NOTEBOOK",
-    "KEYBOARD",
-    "HEADLINE",
-    "MAGAZINE",
-    "PASSWORD",
-    "JOURNALS",
-    "BOOKMARK"
-  ],
-  "clues": {
-    "1A": "Test clue for CROSSING (8)",
-    "1D": "Test clue for CNKHMPJB (8)",
-    "2D": "Test clue for ROEEAAOO (8)",
-    "3D": "Test clue for OTYAGSUO (8)",
-    "4D": "Test clue for SEBDASRK (8)",
-    "5D": "Test clue for SBOLZWNM (8)",
-    "6D": "Test clue for IOAIIOAA (8)",
-    "7D": "Test clue for NORNNRLR (8)",
-    "8D": "Test clue for GKDEEDSK (8)",
-    "9A": "Test clue for NOTEBOOK (8)",
-    "10A": "Test clue for KEYBOARD (8)",
-    "11A": "Test clue for HEADLINE (8)",
-    "12A": "Test clue for MAGAZINE (8)",
-    "13A": "Test clue for PASSWORD (8)",
-    "14A": "Test clue for JOURNALS (8)",
-    "15A": "Test clue for BOOKMARK (8)"
-  }
-},
   {
-  "id": "2026-11-test-12x12",
-  "date": "2026-11-01",
-  "title": "12x12 Test Puzzle",
-  "status": "Published",
+  "id": "2026-08",
+  "date": "2026-08-01",
+  "title": "August's Mini Cryptic",
+  "status": "Draft",
   "solutionRows": [
-    "CROSSWORDING",
-    "BLACKBOARDED",
-    "NEWSLETTERED",
-    "JAVASCRIPTER",
-    "THEMATICALLY",
-    "BACKGROUNDER",
-    "TYPEWRITINGS",
-    "PUBLICATIONS",
-    "CONNECTIONAL",
-    "BOOKMARKLETS",
-    "NAVIGATIONAL",
-    "EXPLANATIONS"
+    "SERENITY##",
+    "###U##O##A",
+    "SMATTERING",
+    "C##H##T##E",
+    "I##A#FELON",
+    "EVENT#L##D",
+    "N##A##L##A",
+    "CEASEFIRES",
+    "E##I##N###",
+    "##BASTIONS"
   ],
   "clues": {
-    "1A": "Test clue for CROSSWORDING (12)",
-    "1D": "Test clue for CBNJTBTPCBNE (12)",
-    "2D": "Test clue for RLEAHAYUOOAX (12)",
-    "3D": "Test clue for OAWVECPBNOVP (12)",
-    "4D": "Test clue for SCSAMKELNKIL (12)",
-    "5D": "Test clue for SKLSAGWIEMGA (12)",
-    "6D": "Test clue for WBECTRRCCAAN (12)",
-    "7D": "Test clue for OOTRIOIATRTA (12)",
-    "8D": "Test clue for RATICUTTIKIT (12)",
-    "9D": "Test clue for DREPANIIOLOI (12)",
-    "10D": "Test clue for IDRTLDNONENO (12)",
-    "11D": "Test clue for NEEELEGNATAN (12)",
-    "12D": "Test clue for GDDRYRSSLSLS (12)",
-    "13A": "Test clue for BLACKBOARDED (12)",
-    "14A": "Test clue for NEWSLETTERED (12)",
-    "15A": "Test clue for JAVASCRIPTER (12)",
-    "16A": "Test clue for THEMATICALLY (12)",
-    "17A": "Test clue for BACKGROUNDER (12)",
-    "18A": "Test clue for TYPEWRITINGS (12)",
-    "19A": "Test clue for PUBLICATIONS (12)",
-    "20A": "Test clue for CONNECTIONAL (12)",
-    "21A": "Test clue for BOOKMARKLETS (12)",
-    "22A": "Test clue for NAVIGATIONAL (12)",
-    "23A": "Test clue for EXPLANATIONS (12)"
+    "1A": "Blasting siren yet calm (8)",
+    "5A": "Couple squel admitting affair (10)",
+    "6A": "Offer lion nibbles even an evildoer (5)",
+    "7A": "Seven thespians taking part in episode (5)",
+    "8A": "Suspensions halt launches? (10)",
+    "9A": "Defences top 3 questions substituted with qualification (8)",
+    "2D": "Utilised to put down ones chosen ending (10)",
+    "3D": "Unorthodox lion - litter looks like belly buttons? (10)",
+    "4D": "Schedules time sculpting sand (7)",
+    "5D": "Tops of solid cast iron fence uncovered lesson (7)"
   }
 }
+
 ]
