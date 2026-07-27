@@ -707,15 +707,7 @@ function analyseGrid(solutionRows) {
   return null;
 }
 
-    function chooseDefaultPuzzle(publishedPuzzles) {
-  const currentMonth = getMonthKey(getLocalTodayIso());
-
-  const thisMonthsPuzzle = publishedPuzzles.find((puzzle) => {
-    return getMonthKey(puzzle.date) === currentMonth;
-  });
-
-  if (thisMonthsPuzzle) return thisMonthsPuzzle;
-
+function chooseDefaultPuzzle(publishedPuzzles) {
   const sorted = [...publishedPuzzles].sort((a, b) => b.date.localeCompare(a.date));
   return sorted[0];
 }
@@ -1193,8 +1185,8 @@ document.querySelectorAll("[data-entry-id]").forEach((button) => {
         const allPuzzles = await response.json();
 
         puzzles = allPuzzles
-          .filter((puzzle) => puzzle.status === "Published")
-          .sort((a, b) => a.date.localeCompare(b.date));
+  .filter((puzzle) => puzzle.status === "Published")
+  .sort((a, b) => b.date.localeCompare(a.date));
 
         if (puzzles.length === 0) {
           throw new Error("No published puzzles found in puzzles.json");
